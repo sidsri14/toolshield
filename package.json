@@ -1,0 +1,42 @@
+{
+  "name": "toolshield",
+  "version": "0.1.0",
+  "description": "Static security linter for MCP tool manifests and tool descriptions (tool-poisoning patterns)",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "toolshield": "bin/toolshield.js"
+  },
+  "scripts": {
+    "scan": "node bin/toolshield.js scan",
+    "rules": "node bin/toolshield.js rules",
+    "test": "node --test test/*.test.js",
+    "test:watch": "node --test --watch test/*.test.js",
+    "sample-report": "node scripts/make-sample-report.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "mcp",
+    "security",
+    "tool-poisoning",
+    "prompt-injection",
+    "linter",
+    "sarif",
+    "static-analysis",
+    "model-context-protocol"
+  ],
+  "license": "MIT",
+  "author": "Siddharth Srivastava",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidsri14/toolshield.git"
+  }
+}

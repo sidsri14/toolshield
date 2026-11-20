@@ -1,0 +1,5 @@
+{
+  "name": "some-random-config",
+  "version": "1.0.0",
+  "settings": { "theme": "dark" }
+}

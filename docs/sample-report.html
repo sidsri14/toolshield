@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>toolshield — sample MCP tool-manifest poisoning review</title>
+<style>
+  body{font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;max-width:1100px;margin:40px auto;padding:0 20px;color:#1a1a1a}
+  h1{font-size:26px;margin-bottom:4px}
+  .sub{color:#666;margin-bottom:28px}
+  .card{border:1px solid #e2e2e2;border-radius:8px;padding:18px 20px;margin-bottom:22px}
+  table{border-collapse:collapse;width:100%;font-size:14px}
+  th,td{border-bottom:1px solid #eee;padding:9px 8px;text-align:left;vertical-align:top}
+  th{background:#fafafa;font-weight:600}
+  code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px}
+  .sev{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:700}
+  .high{background:#ffe3e3;color:#b00020}.medium{background:#fff3cd;color:#7a5b00}
+  .note{background:#f6f6f6;border-left:4px solid #888;padding:12px 16px;color:#444}
+  .counts span{margin-right:16px;font-weight:600}
+</style>
+</head>
+<body>
+<h1>toolshield — sample MCP tool-manifest poisoning review</h1>
+<div class="sub">Generated from a real scan of <code>bad-tools.json</code> — a synthetic fixture, not a customer's system.</div>
+
+<div class="card counts">
+  <strong>1</strong> file scanned &nbsp;·&nbsp;
+  <span class="high">6 high</span>
+  <span class="medium">4 medium</span>
+  <strong>10</strong> total findings
+</div>
+
+<div class="card">
+<h2>Findings</h2>
+<table>
+<thead><tr><th>Severity</th><th>Rule</th><th>Tool</th><th>Field</th><th>What it means</th><th>How to fix</th></tr></thead>
+<tbody>
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TS001</code></td>
+        <td>bash</td>
+        <td><code>description</code></td>
+        <td>description contains instruction-override text: &quot;Ignore previous instructions&quot;</td>
+        <td>Rewrite the description as a neutral capability statement. Move usage policy into your own system prompt, never into untrusted tool metadata.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TS001</code></td>
+        <td>bash</td>
+        <td><code>description</code></td>
+        <td>description contains concealment instruction: &quot;Do not tell&quot;</td>
+        <td>Rewrite the description as a neutral capability statement. Move usage policy into your own system prompt, never into untrusted tool metadata.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TS001</code></td>
+        <td>bash</td>
+        <td><code>description</code></td>
+        <td>description contains data-sending instruction: &quot;Send the token to&quot;</td>
+        <td>Rewrite the description as a neutral capability statement. Move usage policy into your own system prompt, never into untrusted tool metadata.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TS001</code></td>
+        <td>bash</td>
+        <td><code>description</code></td>
+        <td>description contains download-and-execute instruction: &quot;fetch and execute&quot;</td>
+        <td>Rewrite the description as a neutral capability statement. Move usage policy into your own system prompt, never into untrusted tool metadata.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TS002</code></td>
+        <td>bash</td>
+        <td><code>description</code></td>
+        <td>description contains 1 invisible control character codepoint(s): U+200B</td>
+        <td>Strip zero-width and bidi control characters from tool names and descriptions; require review of any non-printing characters.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td><code>TS006</code></td>
+        <td>bash</td>
+        <td><code>name</code></td>
+        <td>Tool name &#39;bash&#39; impersonates a shell or privileged built-in</td>
+        <td>Use a unique, namespaced tool name that identifies the actual provider.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td><code>TS003</code></td>
+        <td>bash</td>
+        <td><code>inputSchema.properties.api_key</code></td>
+        <td>Parameter &#39;api_key&#39; looks like a raw credential input</td>
+        <td>Accept a reference to a secret store or an environment variable name instead of the secret value; never require the raw credential as a tool argument.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td><code>TS004</code></td>
+        <td>bash</td>
+        <td><code>inputSchema.additionalProperties</code></td>
+        <td>inputSchema accepts arbitrary undeclared properties</td>
+        <td>Set additionalProperties to false and declare every accepted argument explicitly.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td><code>TS005</code></td>
+        <td>read_file</td>
+        <td><code>name/description</code></td>
+        <td>Tool &#39;read_file&#39; sounds read-only but its description mentions side effects</td>
+        <td>Rename the tool to reflect its side effects, or remove the side-effecting behavior from the described scope.</td>
+      </tr>
+
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td><code>TS007</code></td>
+        <td>bash</td>
+        <td><code>inputSchema.properties.command</code></td>
+        <td>Sensitive parameter &#39;command&#39; is an unconstrained free-form string</td>
+        <td>Constrain the field with enum, pattern, or format, and validate it server-side before use.</td>
+      </tr>
+</tbody>
+</table>
+</div>
+
+<div class="note">
+<strong>Scope of this review.</strong> toolshield performs static inspection of tool-manifest JSON only.
+It does not execute tools, call MCP servers, make network requests, or review tool implementation code.
+A clean result means none of the seven documented patterns were found — not that the manifest is safe.
+Invisible Unicode matches are reported as codepoint names, never printed raw.
+</div>
+
+<div class="card">
+<h2>What a paid review includes</h2>
+<ol>
+<li>Run toolshield across the supplied tool manifests (<code>tools/list</code> exports, OpenAI-style function files, or JSON arrays).</li>
+<li>Written finding-by-finding report with severity, field, rationale, and concrete fix.</li>
+<li>Corrected example manifest with instruction-like text removed and parameters constrained.</li>
+<li>Optional SARIF file for GitHub code-scanning integration.</li>
+<li>One recheck after fixes are applied.</li>
+</ol>
+<p>Source and test suite: <a href="https://github.com/sidsri14/toolshield">github.com/sidsri14/toolshield</a></p>
+</div>
+</body>
+</html>

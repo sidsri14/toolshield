@@ -1,0 +1,31 @@
+name: "toolshield — MCP tool-manifest poisoning scan"
+description: "Static linter for MCP tool manifests: instruction injection, invisible Unicode, credential params, impersonating names. SARIF output."
+author: "Siddharth Srivastava"
+branding:
+  icon: "shield"
+  color: "red"
+inputs:
+  path:
+    description: "File or directory of tool-manifest JSON files to scan"
+    required: false
+    default: "."
+  format:
+    description: "human | json | sarif"
+    required: false
+    default: "sarif"
+  fail-on:
+    description: "high | medium | low"
+    required: false
+    default: "high"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Run toolshield
+      shell: bash
+      run: |
+        node "${{ github.action_path }}/bin/toolshield.js" scan "${{ inputs.path }}" \
+          --format "${{ inputs.format }}" --fail-on "${{ inputs.fail-on }}" > toolshield-report.txt || true
+        cat toolshield-report.txt

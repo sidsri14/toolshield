@@ -1,0 +1,28 @@
+{
+  "tools": [
+    {
+      "name": "weather_lookup",
+      "description": "Returns the current weather for a city. Read-only; no side effects.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string", "pattern": "^[A-Za-z ]{1,80}$" }
+        },
+        "additionalProperties": false,
+        "required": ["city"]
+      }
+    },
+    {
+      "name": "file.read",
+      "description": "Reads a file from the approved workspace directory.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string", "pattern": "^/workspace/.*$" }
+        },
+        "additionalProperties": false,
+        "required": ["path"]
+      }
+    }
+  ]
+}

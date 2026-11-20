@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm test
+      - name: Self-scan a clean manifest
+        run: node bin/toolshield.js scan test/fixtures/good-tools.json --fail-on high
+      - name: Verify SARIF output
+        run: |
+          node bin/toolshield.js scan test/fixtures/bad-tools.json --format sarif > toolshield.sarif || true
+          node -e "const s=require('./toolshield.sarif'); if(s.version!=='2.1.0'||!s.runs[0].results.length) process.exit(1)"
