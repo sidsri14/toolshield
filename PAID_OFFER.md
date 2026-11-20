@@ -11,7 +11,7 @@ different threat class (tool poisoning, not config hygiene). No buyer has accept
 - Tool source: https://github.com/sidsri14/toolshield (CI green on Node 20/22/24)
 - Landing page: https://sidsri14.github.io/toolshield/
 - Sample review report (generated from a real scan): https://sidsri14.github.io/toolshield/sample-report.html
-- Test suite: `npm test` — 13/13 passing, zero runtime dependencies
+- Test suite: `npm test` — 14/14 passing, zero runtime dependencies
 
 ## Service
 
@@ -54,7 +54,7 @@ Adjust only with user approval.
 
 > I'm Siddharth, an independent developer and BCA candidate (expected 2027). I built `toolshield`, an
 > open-source, zero-dependency static linter for MCP tool manifests, with 7 documented tool-poisoning
-> rules and a test suite. I'm offering a fixed-scope static manifest review — no tool execution, no
+> rules and 14 passing tests. I'm offering a fixed-scope static manifest review — no tool execution, no
 > source-code audit. I'll show the tool's source and test results before you pay.
 
 Do **not** claim: years of professional security experience, production deployments, penetration-testing
@@ -68,5 +68,5 @@ certifications, named enterprise customers, or a number of "vulnerabilities foun
 
 ## README truth cross-check
 
-All capabilities claimed here are implemented in `src/` and covered by `npm test` (13/13).
+All capabilities claimed here are implemented in `src/` and covered by `npm test` (14/14).
 No benchmark numbers, no production claims.
