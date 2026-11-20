@@ -20,7 +20,8 @@ const IMPERSONATION_RE = /(^|[_.\-])(bash|sh|shell|execute|exec|run_shell|run_co
 // Names commonly use snake_case / dotted names, so treat non-letters as separators.
 const READ_VERB_RE = /(?:^|[^A-Za-z])(read|get|list|fetch|view|search|lookup)(?:[^A-Za-z]|$)/i;
 const WRITE_VERB_RE = /(?:^|[^A-Za-z])(write|delete|remove|upload|send|execute|modify|update|run shell)(?:[^A-Za-z]|$)/i;
-const SENSITIVE_PARAM_RE = /command|cmd|path|file|url|uri|script|code|query/i;
+// Separator-aware: "description" must NOT count as "script"; snake_case must still match.
+const SENSITIVE_PARAM_RE = /(?:^|[^A-Za-z])(command|cmd|path|file|url|uri|script|code|query)(?:[^A-Za-z]|$)/i;
 
 function textOf(tool) {
   const parts = [];

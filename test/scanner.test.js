@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { scan, scanFile, expandInputs } from "../src/scanner.js";
@@ -48,6 +49,28 @@ test("good manifest is clean", () => {
   const res = scanFile(fixture("good-tools.json"));
   assert.equal(res.error, null);
   assert.deepEqual(res.findings, []);
+});
+
+test("TS007 does not treat 'description' as the sensitive word 'script'", () => {
+  // Regression: a plain `description` string param was flagged via the substring "script".
+  const dir = path.join(here, "fixtures");
+  const manifest = {
+    tools: [
+      {
+        name: "note",
+        description: "Stores a note.",
+        inputSchema: { type: "object", properties: { description: { type: "string" } }, additionalProperties: false }
+      }
+    ]
+  };
+  const f = path.join(dir, ".tmp-description-param.json");
+  fs.writeFileSync(f, JSON.stringify(manifest));
+  try {
+    const ids = scanFile(f).findings.map((x) => x.ruleId);
+    assert.ok(!ids.includes("TS007"), "description param must not be flagged as a script field");
+  } finally {
+    fs.unlinkSync(f);
+  }
 });
 
 test("non-manifest JSON is skipped without error", () => {
