@@ -21,4 +21,4 @@ jobs:
       - name: Verify SARIF output
         run: |
           node bin/toolshield.js scan test/fixtures/bad-tools.json --format sarif > toolshield.sarif || true
-          node -e "const s=require('./toolshield.sarif'); if(s.version!=='2.1.0'||!s.runs[0].results.length) process.exit(1)"
+          node -e "const fs=require('fs'); const s=JSON.parse(fs.readFileSync('toolshield.sarif','utf8')); if(s.version!=='2.1.0'||!s.runs[0].results.length) process.exit(1)"
