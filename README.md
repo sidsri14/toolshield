@@ -96,6 +96,8 @@ Also accepted: `{ "functions": [...] }` (OpenAI-style), and a bare JSON array of
 | `TS005` | MEDIUM | Read-sounding tool name with side-effecting description |
 | `TS006` | HIGH | Tool name impersonating a shell or privileged built-in (`bash`, `sudo`, `admin`, …) |
 | `TS007` | MEDIUM | Unconstrained free-form string for `command`/`path`/`url`/`code`-style parameters |
+| `TS008` | LOW | Excessive description length (> 1,024 characters) |
+| `TS009` | HIGH | Non-ASCII or homoglyph character in tool name |
 
 Rules are heuristic and configurable only by editing `src/rules.js`. Invisible-character codepoints are reported, never printed raw.
 
