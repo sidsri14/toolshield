@@ -174,5 +174,43 @@ export const RULES = [
       }
       return out;
     }
+  },
+  {
+    id: "TS008",
+    severity: "LOW",
+    title: "Excessive description length (> 1,024 characters)",
+    rationale:
+      "Extremely verbose tool descriptions consume disproportionate model context windows, degrade tool-selection attention, and can be used to hide prompt injections among boilerplate text.",
+    remediation:
+      "Keep tool descriptions concise, focused on tool capabilities, under 1,024 characters.",
+    check({ tool }) {
+      if (typeof tool?.description === "string" && tool.description.length > 1024) {
+        return [{
+          field: "description",
+          value: `${tool.description.length} chars`,
+          message: `Tool description is excessively long (${tool.description.length} chars > 1,024 max recommended)`
+        }];
+      }
+      return [];
+    }
+  },
+  {
+    id: "TS009",
+    severity: "HIGH",
+    title: "Non-ASCII or homoglyph character in tool name",
+    rationale:
+      "Tools using look-alike Unicode characters (such as Cyrillic or non-ASCII homoglyphs) can impersonate trusted tools while evading simple string matching and human review.",
+    remediation:
+      "Restrict tool names to ASCII alphanumeric and standard delimiter characters (a-z, 0-9, _, -).",
+    check({ tool }) {
+      if (typeof tool?.name === "string" && /[^\x20-\x7E]/.test(tool.name)) {
+        return [{
+          field: "name",
+          value: tool.name,
+          message: `Tool name '${tool.name}' contains non-ASCII or homoglyph characters`
+        }];
+      }
+      return [];
+    }
   }
 ];

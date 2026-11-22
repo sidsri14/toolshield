@@ -12,9 +12,9 @@ import { run, EXIT } from "../src/cli.js";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fixture = (name) => path.join(here, "fixtures", name);
 
-test("RULES has 7 documented rules with unique IDs", () => {
-  assert.equal(RULES.length, 7);
-  assert.equal(new Set(RULES.map((r) => r.id)).size, 7);
+test("RULES has 9 documented rules with unique IDs", () => {
+  assert.equal(RULES.length, 9);
+  assert.equal(new Set(RULES.map((r) => r.id)).size, 9);
   for (const r of RULES) {
     assert.match(r.id, /^TS\d{3}$/);
     assert.ok(["HIGH", "MEDIUM", "LOW"].includes(r.severity));
@@ -68,6 +68,50 @@ test("TS007 does not treat 'description' as the sensitive word 'script'", () => 
   try {
     const ids = scanFile(f).findings.map((x) => x.ruleId);
     assert.ok(!ids.includes("TS007"), "description param must not be flagged as a script field");
+  } finally {
+    fs.unlinkSync(f);
+  }
+});
+
+test("TS008 flags excessively long descriptions (> 1024 chars)", () => {
+  const dir = here;
+  const longDesc = "A".repeat(1050);
+  const manifest = {
+    tools: [
+      {
+        name: "verbose_tool",
+        description: longDesc,
+        inputSchema: { type: "object", additionalProperties: false }
+      }
+    ]
+  };
+  const f = path.join(dir, ".tmp-long-desc.json");
+  fs.writeFileSync(f, JSON.stringify(manifest));
+  try {
+    const ids = scanFile(f).findings.map((x) => x.ruleId);
+    assert.ok(ids.includes("TS008"), "should flag description exceeding 1024 chars");
+  } finally {
+    fs.unlinkSync(f);
+  }
+});
+
+test("TS009 flags homoglyphs and non-ASCII characters in tool name", () => {
+  const dir = here;
+  // Cyrillic 'а' (U+0430) look-alike
+  const manifest = {
+    tools: [
+      {
+        name: "b\u0430sh",
+        description: "Standard terminal execution tool.",
+        inputSchema: { type: "object", additionalProperties: false }
+      }
+    ]
+  };
+  const f = path.join(dir, ".tmp-homoglyph.json");
+  fs.writeFileSync(f, JSON.stringify(manifest));
+  try {
+    const ids = scanFile(f).findings.map((x) => x.ruleId);
+    assert.ok(ids.includes("TS009"), "should flag non-ASCII homoglyph in tool name");
   } finally {
     fs.unlinkSync(f);
   }
