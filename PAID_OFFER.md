@@ -52,7 +52,7 @@ Adjust only with user approval.
 
 ### Truthful seller qualification (use verbatim or not at all)
 
-> I'm Siddharth, an independent developer and BCA candidate (expected 2027). I built `toolshield`, an
+> I'm Siddharth, an independent AI-assisted developer based in Lucknow, India. I built `toolshield`, an
 > open-source, zero-dependency static linter for MCP tool manifests, with 7 documented tool-poisoning
 > rules and 14 passing tests. I'm offering a fixed-scope static manifest review — no tool execution, no
 > source-code audit. I'll show the tool's source and test results before you pay.
